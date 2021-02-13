@@ -8,6 +8,18 @@ class StateBuf {
     return this.buf.readInt8(this.offset++);
   }
 
+  readFloatLE(){
+    const r = this.buf.readFloatLE(this.offset);
+    this.offset += 4;
+    return r;
+  }
+
+  readInt32LE(){
+    const r = this.buf.readInt32LE(this.offset);
+    this.offset += 4;
+    return r;
+  }
+
   readUInt32LE(){
     const r = this.buf.readUInt32LE(this.offset);
     this.offset += 4;
@@ -16,7 +28,7 @@ class StateBuf {
 
   skip(n) {
     const newOffset = this.offset + n;
-    if(newOffset > this.buf.length) throw 'Error: OUT OF BOUNDS';
+    if(newOffset > this.buf.length) throw new Error(`Cannot skip bytes. start: ${this.offset}, offset: ${n}, ${newOffset} > ${this.buf.length}`);
     this.offset = newOffset;
   }
 
@@ -30,6 +42,10 @@ class StateBuf {
 
   remaining() {
     return this.buf.length - this.offset;
+  }
+
+  read() {
+    return this.offset;
   }
 }
 
